@@ -41,13 +41,15 @@ const postListColumns = [
         title: "Created",
         dataIndex: "date",
         key: "date",
-        render: formateDate
+        render: formateDate,
+        sorter: true
     },
     {
         title: "Updated",
         dataIndex: "updated",
         key: "updated",
-        render: formateDate
+        render: formateDate,
+        sorter: true
     },
     {
         title: "Action",

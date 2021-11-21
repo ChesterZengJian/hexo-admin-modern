@@ -18,7 +18,6 @@ export default function DefaultLayout() {
     const location = useLocation();
 
     useEffect(() => {
-        console.log(location.pathname)
         setCurPage([location.pathname + ""]);
     }, [location.pathname]);
 

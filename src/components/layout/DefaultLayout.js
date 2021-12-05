@@ -6,7 +6,7 @@ import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
 } from "@ant-design/icons";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, BrowserRouter } from "react-router-dom";
 import { routes } from "../../config";
 
 export default function DefaultLayout() {

@@ -47,7 +47,7 @@ export default function PostList() {
         <>
             <Space align="center" wrap>
                 <Button type="primary">
-                    <Link to="/categories">Add</Link>
+                    <Link to="/posts/create">Create</Link>
                 </Button>
             </Space>
             <Table

@@ -6,7 +6,7 @@ import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
 } from "@ant-design/icons";
-import { Outlet, Link, useLocation, BrowserRouter } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import { routes } from "../../config";
 
 export default function DefaultLayout() {
@@ -18,6 +18,10 @@ export default function DefaultLayout() {
     const location = useLocation();
 
     useEffect(() => {
+        if (location.pathname === "/" && routes[0] && routes[0].url) {
+            setCurPage([routes[0].url + ""]);
+            return;
+        }
         setCurPage([location.pathname + ""]);
     }, [location.pathname]);
 

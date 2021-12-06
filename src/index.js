@@ -13,6 +13,7 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route path="/" element={<PostList />} />
+          <Route path="/posts" element={<PostList />} />
           <Route path="categories" element={<CategoryList />} />
         </Route>
       </Routes>

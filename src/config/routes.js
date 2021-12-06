@@ -6,7 +6,7 @@ import {
 const routes = [
     {
         name: "Posts",
-        url: "/",
+        url: "/posts",
         icon: <UserOutlined />,
     },
     {

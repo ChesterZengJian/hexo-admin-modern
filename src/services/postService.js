@@ -11,4 +11,11 @@ async function getPosts(params) {
     return res.data;
 }
 
-export { getPosts };
+async function createPost(params) {
+    let url = prefixUrl + "/posts/new";
+    console.log(params)
+    const res = await axios.post(url, params);
+    return res;
+}
+
+export { getPosts, createPost };

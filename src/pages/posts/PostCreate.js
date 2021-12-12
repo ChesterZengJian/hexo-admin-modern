@@ -10,7 +10,12 @@ export default function PostCreate() {
 
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
-        createPost(values).then(function (res) {
+        createPost({
+            title: values.title,
+            categories: [values.category],
+            tags: values.tags,
+            content: values.content
+        }).then(function (res) {
             console.log("successfully")
             console.log(res)
         })
@@ -78,7 +83,8 @@ export default function PostCreate() {
                                     required: true,
                                     message: "'Title' is required"
                                 }
-                            ]}>
+                            ]}
+                            initialValue={"Hello"}>
                             <Input />
                         </Form.Item>
                     </Col>
@@ -90,10 +96,8 @@ export default function PostCreate() {
                                     message: "'Category' is required"
                                 }
                             ]}>
-                            <Input />
                             <Select
-                                style={{ width: 240 }}
-                                placeholder="custom dropdown render"
+                                // placeholder="select the category"
                                 dropdownRender={menu => (
                                     <div>
                                         {menu}
@@ -104,7 +108,7 @@ export default function PostCreate() {
                                                 style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
                                                 onClick={addItem}
                                             >
-                                                <PlusOutlined /> Add item
+                                                <PlusOutlined />
                                             </a>
                                         </div>
                                     </div>
@@ -117,7 +121,7 @@ export default function PostCreate() {
                         </Form.Item>
                     </Col>
                     <Col span={7} offset={1}>
-                        <Form.Item name={"tag"} label={"Tag"}>
+                        <Form.Item name={"tags"} label={"Tag"}>
                             <Select mode="tags" style={{ width: '100%' }}
                                 onChange={handleChange}>
                                 {children}

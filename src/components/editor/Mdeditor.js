@@ -1,10 +1,17 @@
-import * as React from "react";
+import React, { useState } from "react";
 import SimpleMDE from "react-simplemde-editor";
 
-const Mdeditor = ({ id, source }) => {
-  // const {
-  //   input: { value, onChange },
-  // } = useField(source);
+const Mdeditor = ({ post = {}, value = "", onChange }) => {
+  const [content, setContent] = useState("");
+
+  const triggerChange = (changeValue) => {
+    onChange?.(changeValue)
+  };
+
+  const onContentChange = (val) => {
+    setContent(val);
+    triggerChange(val)
+  }
 
   const imageUploadFunction = function (data, onSuccess, onError) {
     console.log(data instanceof File);
@@ -84,7 +91,8 @@ const Mdeditor = ({ id, source }) => {
 
   return (
     <SimpleMDE
-      // onChange={onChange}
+      value={value || content}
+      onChange={onContentChange}
       extraKeys={extraKeys()}
       options={{
         minHeight: "72vh",
@@ -92,10 +100,10 @@ const Mdeditor = ({ id, source }) => {
         autofocus: true,
         autosave: {
           enabled: true,
-          uniqueId: id,
+          uniqueId: post.id || "a7a78ce1-941c-4337-bb39-d79c15c2709a",
           delay: 300
         },
-        // initialValue: value,
+        initialValue: value.content || content,
         uploadImage: true,
         imageUploadFunction: imageUploadFunction,
         shortcuts,

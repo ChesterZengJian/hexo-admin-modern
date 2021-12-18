@@ -10,6 +10,7 @@ export default function PostList() {
 
     useEffect(() => {
         getPosts({
+            isDiscarded: 0,
             currPage: consts.defaultCurrent,
             pageSize: consts.defaultPageSize,
             sort: "date",
@@ -29,6 +30,7 @@ export default function PostList() {
         console.log(filters)
 
         getPosts({
+            isDiscarded: 0,
             currPage: pagination.current,
             pageSize: pagination.pageSize,
             sort: sorter.column ? sorter.field : "date",
@@ -62,6 +64,10 @@ export default function PostList() {
                 scroll={{ y: "77vh" }}
                 rowKey="_id"
                 onChange={onChange}
+                rowClassName={(post) => {
+                    if (post.isDraft)
+                        return "post-draft";
+                }}
             />
         </>
     )

@@ -31,7 +31,7 @@ module.exports = function (model, id, update, callback, hexo) {
 
   var split = hfm.split(post.raw),
     frontMatter = split.data
-    compiled = hfm.parse([frontMatter, '---', split.content].join('\n'));
+  compiled = hfm.parse([frontMatter, '---', split.content].join('\n'));
 
   var preservedKeys = ['title', 'date', 'tags', 'categories', '_content', 'author'];
   Object.keys(hexo.config.metadata || {}).forEach(function (key) {
@@ -57,11 +57,11 @@ module.exports = function (model, id, update, callback, hexo) {
   update.updated = moment()
 
   // tags and cats are only getters now. ~ see: /hexo/lib/models/post.js
-  if ( typeof update.tags !== 'undefined' ) {
+  if (typeof update.tags !== 'undefined') {
     post.setTags(update.tags)
     delete update.tags
   }
-  if ( typeof update.categories !== 'undefined' ) {
+  if (typeof update.categories !== 'undefined') {
     post.setCategories(update.categories)
     delete update.categories
   }
@@ -69,8 +69,8 @@ module.exports = function (model, id, update, callback, hexo) {
   extend(post, update)
 
   post.save(function () {
-  //  console.log(post.full_source, post.source)
-    fs.writeFile(full_source, raw, function(err){
+    // console.log(post.full_source, post.source)
+    fs.writeFile(full_source, raw, function (err) {
       if (err) return callback(err);
 
       if (full_source !== prev_full) {
@@ -78,16 +78,16 @@ module.exports = function (model, id, update, callback, hexo) {
         // move asset dir
         var assetPrev = removeExtname(prev_full);
         var assetDest = removeExtname(full_source);
-        fs.exists(assetPrev).then(function(exist) {
+        fs.exists(assetPrev).then(function (exist) {
           if (exist) {
-            fs.copyDir(assetPrev, assetDest).then(function() {
+            fs.copyDir(assetPrev, assetDest).then(function () {
               fs.rmdir(assetPrev);
             });
           }
         });
       }
       hexo.source.process([post.source]).then(function () {
-  //      console.log(post.full_source, post.source)
+        // console.log(post.full_source, post.source, hexo.model(model).get(id))
         callback(null, hexo.model(model).get(id));
       });
     });

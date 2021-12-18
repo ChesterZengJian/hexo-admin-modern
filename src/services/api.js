@@ -51,7 +51,9 @@ module.exports = function (app, hexo) {
   function remove(id, body, res) {
     var post = hexo.model('Post').get(id)
     if (!post) return res.send(404, "Post not found")
+    console.log("get post:" + id);
     var newSource = '_discarded/' + post.source.slice('_drafts'.length)
+    console.log("newSource=" + newSource);
     update(id, { source: newSource }, function (err, post) {
       if (err) {
         return res.send(400, err);
@@ -339,6 +341,7 @@ module.exports = function (app, hexo) {
       return unpublish(parts[parts.length - 2], req.body, res)
     }
     if (last === 'remove') {
+      console.log("begin remove");
       return remove(parts[parts.length - 2], req.body, res)
     }
     if (last === 'rename') {

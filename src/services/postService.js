@@ -18,4 +18,10 @@ async function createPost(params) {
     return res;
 }
 
-export { getPosts, createPost };
+async function removePost(id) {
+    let url = prefixUrl + "/posts/" + id + "/remove";
+    const res = await axios.post(url);
+    return res;
+}
+
+export { getPosts, createPost, removePost };

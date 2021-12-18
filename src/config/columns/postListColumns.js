@@ -1,7 +1,8 @@
 import React from "react";
-import { Tag, Space } from "antd";
+import { Tag, Space, Button } from "antd";
 import { Link } from "react-router-dom";
 import { formateDate } from "../../services/common/formatService";
+import { removePost } from "../../services/postService";
 
 const postListColumns = [
     {
@@ -55,11 +56,18 @@ const postListColumns = [
         title: "Action",
         dataIndex: "",
         key: "act",
-        render: () => (
+        render: (post) => (
             <>
                 <Space split="|" wrap>
                     <Link to="/">Edit</Link>
-                    <Link to="/">Delete</Link>
+                    <Button type="link" danger onClick={() => {
+                        removePost(post._id).then(function (res) {
+                            console.log(res);
+                        })
+                    }}>
+                        {/* <Link to={"/posts/" + post._id+"/remove"}>Delete {post._id}</Link> */}
+                        Delete
+                    </Button>
                 </Space>
             </>
         ),

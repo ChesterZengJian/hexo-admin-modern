@@ -268,15 +268,35 @@ module.exports = function (app, hexo) {
     let queryStr = url.parse(req.url, true).query
     let currPage = parseInt(queryStr.currPage) || 1;
     let pageSize = parseInt(queryStr.pageSize) || 10;
-    let sortField = queryStr.sort || 'date';
+    let sortField = queryStr.sort || "date";
     let order = parseInt(queryStr.order) || -1;
+    let isDiscarded = queryStr.isDiscarded || "";
+    let isDraft = queryStr.isDraft || "";
 
     console.log("currPage:" + currPage + ";limitCount:" + pageSize
       + ";skipCount:" + (currPage - 1) * pageSize + ";sortField:" + sortField + ";order:" + order
-      + ";title:" + queryStr.title);
+      + ";title:" + queryStr.title, ";isDiscarded=", isDiscarded, ";isDraft=", isDraft);
 
     let post = hexo.model('Post')
-    let total = post.count();
+    let total = 0;
+    // console.log("posts:", post)
+
+    if (isDraft) {
+      post = post.find({ published: isDraft === 1 ? true : false });
+    }
+
+    if (isDiscarded) {
+      if (isDiscarded === 1) {
+        post = post.find({}).filter((data) => {
+          return data.source.indexOf('_discarded') === 0
+        });
+      }
+      else {
+        post = post.find({}).filter((data) => {
+          return data.source.indexOf('_discarded') !== 0
+        });
+      }
+    }
 
     if (queryStr.title) {
       post = post.find({}).filter((data) => {
@@ -284,6 +304,7 @@ module.exports = function (app, hexo) {
       })
     }
 
+    total = post.count();
     post = post
       .sort(sortField, order)
       .find({}, { skip: (currPage - 1) * pageSize, limit: pageSize })

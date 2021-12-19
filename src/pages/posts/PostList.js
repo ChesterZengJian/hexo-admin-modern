@@ -132,7 +132,7 @@ export default function PostList() {
                         }}>
                             {post.isDraft ? "Publish" : "Draft"}
                         </Button>
-                        <Link to="/">Edit</Link>
+                        <Link to={"/posts/" + post._id}>Edit</Link>
                         <Button disabled={!post.isDraft} type="link" danger onClick={() => {
                             removePost(post._id).then(function (res) {
                                 console.log(res);

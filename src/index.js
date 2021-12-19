@@ -15,6 +15,7 @@ ReactDOM.render(
           <Route path="/" element={<PostList />} />
           <Route path="/posts" element={<PostList />} />
           <Route path="/posts/create" element={<PostCreate />} />
+          <Route path="/posts/:id" element={<PostCreate />} />
           <Route path="categories" element={<CategoryList />} />
         </Route>
       </Routes>

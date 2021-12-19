@@ -1,22 +1,55 @@
 import { Button, Col, Row, Form, Input, Select, Divider } from "antd"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { Mdeditor } from "../../components/editor"
-import { createPost } from "../../services/postService";
+import { createPost, editPost, getPost } from "../../services/postService";
 import { PlusOutlined } from '@ant-design/icons';
+import { useEffect, useState } from "react";
 
 export default function PostCreate() {
     const [form] = Form.useForm();
+    const [post, setPost] = useState({});
     const navigate = useNavigate();
+
+    let { id } = useParams();
+
+    useEffect(() => {
+        if (id) {
+            getPost(id).then((res) => {
+                setPost(res);
+                form.setFieldsValue({
+                    title: res.title,
+                    content: res._content,
+                    category: (res.categories && res.categories[0]) || "",
+                    tags: res.tags
+                })
+            })
+        }
+        // setPost({ _id: id });
+    }, [])
 
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
+        if (post._id) {
+            console.log("post=", post)
+            editPost(post._id, {
+                title: values.title,
+                categories: [values.category],
+                tags: values.tags,
+                _content: values.content
+            }).then((res) => {
+                console.log("edit success:", res);
+            });
+            return;
+        }
         createPost({
             title: values.title,
             categories: [values.category],
             tags: values.tags,
             content: values.content
         }).then(function (res) {
-            navigate("/posts", { replace: true });
+            console.log("res=", res)
+            setPost(res.data);
+            // navigate("/posts", { replace: true });
         })
     };
 
@@ -52,6 +85,18 @@ export default function PostCreate() {
         // });
     };
 
+    const submitButton = () => {
+        if (post._id) {
+            return <Button display={post._id} type="primary" htmlType="submit">
+                Edit
+            </Button>
+        }
+
+        return <Button display={post._id} type="primary" htmlType="submit">
+            Create
+        </Button>
+    }
+
     return (
         <>
             <Form
@@ -61,9 +106,7 @@ export default function PostCreate() {
                 <Row gutter={24}>
                     <Col span={1}>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Create
-                            </Button>
+                            {submitButton()}
                         </Form.Item>
                     </Col>
                     <Col offset={22} span={1}>
@@ -83,7 +126,10 @@ export default function PostCreate() {
                                     message: "'Title' is required"
                                 }
                             ]}
-                            initialValue={"Hello"}>
+                            initialValue={post.title}
+                            value={post.title}
+                            setFile
+                        >
                             <Input />
                         </Form.Item>
                     </Col>

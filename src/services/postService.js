@@ -11,8 +11,21 @@ async function getPosts(params) {
     return res.data;
 }
 
+async function getPost(id) {
+    let url = prefixUrl + "/posts/" + id;
+    const res = await axios.get(url);
+    return res.data;
+}
+
 async function createPost(params) {
     let url = prefixUrl + "/posts/new";
+    console.log(params)
+    const res = await axios.post(url, params);
+    return res;
+}
+
+async function editPost(id, params) {
+    let url = prefixUrl + "/posts/" + id;
     console.log(params)
     const res = await axios.post(url, params);
     return res;
@@ -36,4 +49,4 @@ async function unpublishPost(id) {
     return res;
 }
 
-export { getPosts, createPost, removePost, publishPost, unpublishPost };
+export { getPosts, getPost, createPost, editPost, removePost, publishPost, unpublishPost };

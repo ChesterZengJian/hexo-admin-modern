@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Table, Space, Button } from "antd";
+import { Table, Space, Button, Tag } from "antd";
 import { Link } from "react-router-dom";
-import { postListColumns as columns, consts } from "../../config";
-import { getPosts } from "../../services/postService";
+import { consts } from "../../config";
+import { getPosts, publishPost, removePost, unpublishPost } from "../../services/postService";
+import { formateDate } from "../../services/common/formatService";
 
 export default function PostList() {
+    const [queryPostsParam, setQueryPostsParam] = useState({
+        isDiscarded: 0,
+        currPage: consts.defaultCurrent,
+        pageSize: consts.defaultPageSize,
+        sort: "date",
+        order: consts.defaultOrder
+    })
     const [posts, setPosts] = useState([]);
     const [postTotal, setPostTotal] = useState(0);
 
     useEffect(() => {
-        getPosts({
-            isDiscarded: 0,
-            currPage: consts.defaultCurrent,
-            pageSize: consts.defaultPageSize,
-            sort: "date",
-            order: consts.defaultOrder
-        }).then(function (posts) {
+        getPosts(queryPostsParam).then(function (posts) {
             console.log(posts)
             setPostList(posts);
         });
-    }, [])
+    }, [queryPostsParam])
+
+    const refresh = () => {
+        getPosts(queryPostsParam).then(function (posts) {
+            setPostList(posts);
+        });
+    };
 
     const onChange = (pagination, filters, sorter) => {
         console.log("pagination:")
@@ -29,21 +37,115 @@ export default function PostList() {
         console.log("filter:")
         console.log(filters)
 
-        getPosts({
-            isDiscarded: 0,
-            currPage: pagination.current,
-            pageSize: pagination.pageSize,
-            sort: sorter.column ? sorter.field : "date",
-            order: sorter.order === "ascend" ? 1 : -1
-        }).then(function (posts) {
+        queryPostsParam.currPage = pagination.current;
+        queryPostsParam.pageSize = pagination.pageSize;
+        queryPostsParam.sort = sorter.column ? sorter.field : "date";
+        queryPostsParam.order = sorter.order === "ascend" ? 1 : -1;
+
+        getPosts(queryPostsParam).then(function (posts) {
+            setQueryPostsParam(queryPostsParam);
             setPostList(posts);
         });
+
+        // getPosts({
+        //     isDiscarded: 0,
+        //     currPage: pagination.current,
+        //     pageSize: pagination.pageSize,
+        //     sort: sorter.column ? sorter.field : "date",
+        //     order: sorter.order === "ascend" ? 1 : -1
+        // }).then(function (posts) {
+        //     setPostList(posts);
+        // });
     }
 
     const setPostList = function (posts) {
         setPosts(posts.data)
         setPostTotal(posts.total)
     }
+
+    const columns = [
+        {
+            title: "Title",
+            dataIndex: "title",
+            key: "title",
+            responsive: ["xs", "md", "lg"],
+            sorter: true
+        },
+        {
+            title: "Category",
+            dataIndex: "categories",
+            key: "categories",
+            ellipsis: true
+        },
+        {
+            title: "Tags",
+            key: "tags",
+            dataIndex: "tags",
+            render: (tags) => (
+                <>
+                    {tags.map((tag) => {
+                        let color = tag.length > 5 ? "geekblue" : "green";
+                        if (tag === "loser") {
+                            color = "volcano";
+                        }
+                        return (
+                            <Tag color={color} key={tag}>
+                                {tag.toUpperCase()}
+                            </Tag>
+                        );
+                    })}
+                </>
+            ),
+        },
+        {
+            title: "Created",
+            dataIndex: "date",
+            key: "date",
+            render: formateDate,
+            sorter: true
+        },
+        {
+            title: "Updated",
+            dataIndex: "updated",
+            key: "updated",
+            render: formateDate,
+            sorter: true
+        },
+        {
+            title: "Action",
+            dataIndex: "",
+            key: "act",
+            render: (text, post) => (
+                <>
+                    <Space split="|" wrap>
+                        <Button type="link" onClick={() => {
+                            console.log("text=", text)
+                            if (post.isDraft) {
+                                publishPost(post._id).then(function (res) {
+                                    refresh();
+                                })
+                                return;
+                            }
+                            unpublishPost(post._id).then(function (res) {
+                                refresh();
+                            });
+                        }}>
+                            {post.isDraft ? "Publish" : "Draft"}
+                        </Button>
+                        <Link to="/">Edit</Link>
+                        <Button disabled={!post.isDraft} type="link" danger onClick={() => {
+                            removePost(post._id).then(function (res) {
+                                console.log(res);
+                                refresh();
+                            })
+                        }}>
+                            Delete
+                        </Button>
+                    </Space>
+                </>
+            ),
+        },
+    ];
 
     return (
         <>

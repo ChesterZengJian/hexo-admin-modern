@@ -2,7 +2,7 @@ import React from "react";
 import { Tag, Space, Button } from "antd";
 import { Link } from "react-router-dom";
 import { formateDate } from "../../services/common/formatService";
-import { removePost } from "../../services/postService";
+import { publishPost, removePost, unpublishPost } from "../../services/postService";
 
 const postListColumns = [
     {
@@ -59,6 +59,19 @@ const postListColumns = [
         render: (post) => (
             <>
                 <Space split="|" wrap>
+                    <Button type="link" onClick={() => {
+                        if (post.isDraft) {
+                            publishPost(post._id).then(function (res) {
+                                console.log("publish:", res)
+                            })
+                            return;
+                        }
+                        unpublishPost(post._id).then(function (res) {
+                            console.log("unpublish:", res)
+                        })
+                    }}>
+                        {post.isDraft ? "Publish" : "Draft"}
+                    </Button>
                     <Link to="/">Edit</Link>
                     <Button type="link" danger onClick={() => {
                         removePost(post._id).then(function (res) {

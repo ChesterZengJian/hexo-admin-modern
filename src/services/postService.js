@@ -24,4 +24,16 @@ async function removePost(id) {
     return res;
 }
 
-export { getPosts, createPost, removePost };
+async function publishPost(id) {
+    let url = prefixUrl + "/posts/" + id + "/publish";
+    const res = await axios.post(url);
+    return res;
+}
+
+async function unpublishPost(id) {
+    let url = prefixUrl + "/posts/" + id + "/unpublish";
+    const res = await axios.post(url);
+    return res;
+}
+
+export { getPosts, createPost, removePost, publishPost, unpublishPost };

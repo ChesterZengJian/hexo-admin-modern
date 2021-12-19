@@ -1,12 +1,12 @@
 import { Button, Col, Row, Form, Input, Select, Divider } from "antd"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Mdeditor } from "../../components/editor"
 import { createPost } from "../../services/postService";
 import { PlusOutlined } from '@ant-design/icons';
 
-
 export default function PostCreate() {
     const [form] = Form.useForm();
+    const navigate = useNavigate();
 
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
@@ -16,8 +16,7 @@ export default function PostCreate() {
             tags: values.tags,
             content: values.content
         }).then(function (res) {
-            console.log("successfully")
-            console.log(res)
+            navigate("/posts", { replace: true });
         })
     };
 

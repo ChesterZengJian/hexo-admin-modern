@@ -4,15 +4,30 @@ import { Mdeditor } from "../../components/editor"
 import { createPost, editPost, getPost } from "../../services/postService";
 import { PlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
+import { getCategories } from "../../services/categoryService";
+import { getTags } from "../../services/tagService";
 
 export default function PostCreate() {
     const [form] = Form.useForm();
     const [post, setPost] = useState({});
+    const [tags, setTags] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [newCategory, setNewCategory] = useState('');
     const navigate = useNavigate();
+    const { Option } = Select;
 
     let { id } = useParams();
 
     useEffect(() => {
+        getCategories().then((res) => {
+            setCategories(res.data);
+            console.log("categories:", res)
+        });
+
+        getTags().then((res) => {
+            setTags(res.data);
+        });
+
         if (id) {
             getPost(id).then((res) => {
                 setPost(res);
@@ -24,6 +39,7 @@ export default function PostCreate() {
                 })
             })
         }
+
         // setPost({ _id: id });
     }, [])
 
@@ -53,36 +69,37 @@ export default function PostCreate() {
         })
     };
 
-    const { Option } = Select;
-    const children = [];
-
-    for (let i = 10; i < 36; i++) {
-        children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+    const getTagOptions = () => {
+        let tagOptions = [];
+        for (let i = 0; i < tags.length; i++) {
+            tagOptions.push(<Option key={tags[i].name}>{tags[i].name}</Option>);
+        }
+        return tagOptions;
     }
 
-    const handleChange = (value) => {
+    const getCategoryOptions = () => {
+        let categoryOptions = [];
+        for (let i = 0; i < categories.length; i++) {
+            categoryOptions.push(<Option key={categories[i].name}>{categories[i].name}</Option>)
+        }
+        return categoryOptions;
+    }
+
+    const tagsSelectorHandleChange = (value) => {
         console.log(`selected ${value}`);
     }
 
-    const state = {
-        items: ['jack', 'lucy'],
-        name: '',
-    };
-
-    let index = 0;
     const onNameChange = event => {
-        // this.setState({
-        //     name: event.target.value,
-        // });
+        setNewCategory(event.target.value)
+        console.log("event.target.value=", event.target.value)
     };
 
-    const addItem = () => {
-        console.log('addItem');
-        // const { items, name } = this.state;
-        // this.setState({
-        //     items: [...items, name || `New item ${index++}`],
-        //     name: '',
-        // });
+    const addCategoryOption = () => {
+        console.log('addItem:', newCategory);
+
+        categories.push({ name: newCategory })
+        setCategories(categories);
+        setNewCategory('');
     };
 
     const submitButton = () => {
@@ -128,7 +145,6 @@ export default function PostCreate() {
                             ]}
                             initialValue={post.title}
                             value={post.title}
-                            setFile
                         >
                             <Input />
                         </Form.Item>
@@ -142,34 +158,33 @@ export default function PostCreate() {
                                 }
                             ]}>
                             <Select
-                                // placeholder="select the category"
+                                placeholder="select the category"
                                 dropdownRender={menu => (
                                     <div>
                                         {menu}
                                         <Divider style={{ margin: '4px 0' }} />
                                         <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
-                                            <Input style={{ flex: 'auto' }} value={state.name} onChange={onNameChange} />
-                                            <a
-                                                style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
-                                                onClick={addItem}
+                                            <Input style={{ flex: 'auto' }} value={newCategory} onChange={onNameChange} />
+                                            <Button
+                                                type="link"
+                                                onClick={addCategoryOption}
                                             >
                                                 <PlusOutlined />
-                                            </a>
+                                            </Button>
                                         </div>
                                     </div>
                                 )}
                             >
-                                {state.items.map(item => (
-                                    <Option key={item}>{item}</Option>
-                                ))}
+                                {getCategoryOptions()}
                             </Select>
                         </Form.Item>
                     </Col>
                     <Col span={7} offset={1}>
                         <Form.Item name={"tags"} label={"Tag"}>
-                            <Select mode="tags" style={{ width: '100%' }}
-                                onChange={handleChange}>
-                                {children}
+                            <Select mode="tags"
+                                placeholder="select the tags"
+                                onChange={tagsSelectorHandleChange}>
+                                {getTagOptions()}
                             </Select>
                         </Form.Item>
                     </Col>

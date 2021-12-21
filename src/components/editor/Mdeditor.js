@@ -97,7 +97,7 @@ const Mdeditor = ({ post = {}, value = "", onChange }) => {
       options={{
         minHeight: "72vh",
         maxHeight: "72vh",
-        autofocus: true,
+        autofocus: false,
         autosave: {
           enabled: true,
           uniqueId: post.id || "a7a78ce1-941c-4337-bb39-d79c15c2709a",

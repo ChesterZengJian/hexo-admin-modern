@@ -148,6 +148,26 @@ module.exports = function (app, hexo) {
     res.done(tagsCategoriesAndMetadata())
   });
 
+  use('categories/list', function (req, res) {
+    console.log("categories:", hexo.model('Category'))
+    let categories = hexo.model('Category');
+    let total = categories.count();
+    res.done({
+      total: total,
+      data: categories.toArray()
+    });
+  });
+
+  use('tags/list', function (req, res) {
+    console.log("Tags:", hexo.model('Tag'))
+    let tags = hexo.model('Tag');
+    let total = tags.count();
+    res.done({
+      total: total,
+      data: tags.toArray()
+    });
+  });
+
   use('settings/list', function (req, res) {
     res.done(getSettings())
   });

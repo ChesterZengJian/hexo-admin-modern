@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Table, Space, Button, Tag } from "antd";
+import { Table, Space, Button, Tag, Input } from "antd";
+import { SyncOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import { consts } from "../../config";
 import { getPosts, publishPost, removePost, unpublishPost } from "../../services/postService";
@@ -8,6 +9,7 @@ import { formateDate } from "../../services/common/formatService";
 export default function PostList() {
     const [queryPostsParam, setQueryPostsParam] = useState({
         isDiscarded: 0,
+        title: '',
         currPage: consts.defaultCurrent,
         pageSize: consts.defaultPageSize,
         sort: "date",
@@ -15,6 +17,8 @@ export default function PostList() {
     })
     const [posts, setPosts] = useState([]);
     const [postTotal, setPostTotal] = useState(0);
+    const [refreshing, setRefreshing] = useState(false);
+    const [searching, setSearching] = useState(false);
 
     useEffect(() => {
         getPosts(queryPostsParam).then(function (posts) {
@@ -24,8 +28,10 @@ export default function PostList() {
     }, [queryPostsParam])
 
     const refresh = () => {
+        setRefreshing(true);
         getPosts(queryPostsParam).then(function (posts) {
             setPostList(posts);
+            setRefreshing(false);
         });
     };
 
@@ -147,11 +153,24 @@ export default function PostList() {
         },
     ];
 
+    const { Search } = Input;
+    const onSearch = value => {
+        setSearching(true);
+        queryPostsParam.title = value;
+        getPosts(queryPostsParam).then(function (posts) {
+            setPostList(posts);
+            setSearching(false);
+        });
+    };
     return (
         <>
             <Space align="center" wrap>
                 <Button type="primary">
                     <Link to="/posts/create">Create</Link>
+                </Button>
+                <Search placeholder="input search text" allowClear onSearch={onSearch} loading={searching} />
+                <Button onClick={() => { refresh(); }}>
+                    <SyncOutlined spin={refreshing} />
                 </Button>
             </Space>
             <Table

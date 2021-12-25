@@ -3,14 +3,19 @@ import SimpleMDE from "react-simplemde-editor";
 
 const Mdeditor = ({ post = {}, value = "", onChange }) => {
   const [content, setContent] = useState("");
+  let contentVal = "";
 
   const triggerChange = (changeValue) => {
     onChange?.(changeValue)
   };
 
   const onContentChange = (val) => {
-    setContent(val);
-    triggerChange(val)
+    contentVal = val;
+  }
+
+  const onContentBlur = () => {
+    setContent(contentVal);
+    triggerChange(contentVal)
   }
 
   const imageUploadFunction = function (data, onSuccess, onError) {
@@ -93,13 +98,14 @@ const Mdeditor = ({ post = {}, value = "", onChange }) => {
     <SimpleMDE
       value={value || content}
       onChange={onContentChange}
+      onBlur={onContentBlur}
       extraKeys={extraKeys()}
       options={{
         minHeight: "72vh",
         maxHeight: "72vh",
         autofocus: false,
         autosave: {
-          enabled: true,
+          enabled: post.id != null,
           uniqueId: post.id || "a7a78ce1-941c-4337-bb39-d79c15c2709a",
           delay: 300
         },

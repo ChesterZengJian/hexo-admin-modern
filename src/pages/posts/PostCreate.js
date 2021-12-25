@@ -1,4 +1,4 @@
-import { Button, Col, Row, Form, Input, Select, Divider } from "antd"
+import { Button, Col, Row, Form, Input, Select, Divider, Space } from "antd"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Mdeditor } from "../../components/editor"
 import { createPost, editPost, getPost } from "../../services/postService";
@@ -39,8 +39,6 @@ export default function PostCreate() {
                 })
             })
         }
-
-        // setPost({ _id: id });
     }, [])
 
     const onFinish = (values) => {
@@ -103,15 +101,13 @@ export default function PostCreate() {
     };
 
     const submitButton = () => {
-        if (post._id) {
-            return <Button display={post._id} type="primary" htmlType="submit">
-                Edit
-            </Button>
-        }
-
-        return <Button display={post._id} type="primary" htmlType="submit">
-            Create
-        </Button>
+        return (
+            <Space>
+                <Button display={post._id} type="primary" htmlType="submit">
+                    Save
+                </Button>
+            </Space>
+        )
     }
 
     return (

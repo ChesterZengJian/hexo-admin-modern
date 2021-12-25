@@ -149,22 +149,46 @@ module.exports = function (app, hexo) {
   });
 
   use('categories/list', function (req, res) {
-    console.log("categories:", hexo.model('Category'))
     let categories = hexo.model('Category');
     let total = categories.count();
+    let data = categories.map(c => {
+      return {
+        _id: c._id,
+        name: c.name
+      };
+    });
+    console.log("categories:", data, ";total:", total)
     res.done({
       total: total,
-      data: categories.toArray()
+      data: data.sort((a, b) => {
+        var x = a.name.toLowerCase();
+        var y = b.name.toLowerCase();
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      })
     });
   });
 
   use('tags/list', function (req, res) {
-    console.log("Tags:", hexo.model('Tag'))
+    // console.log("Tags:", hexo.model('Tag'))
     let tags = hexo.model('Tag');
+    let data = tags.map(c => {
+      return {
+        _id: c._id,
+        name: c.name
+      };
+    });
     let total = tags.count();
     res.done({
       total: total,
-      data: tags.toArray()
+      data: data.sort((a, b) => {
+        var x = a.name.toLowerCase();
+        var y = b.name.toLowerCase();
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      })
     });
   });
 

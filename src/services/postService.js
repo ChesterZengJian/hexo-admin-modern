@@ -49,4 +49,36 @@ async function unpublishPost(id) {
     return res;
 }
 
-export { getPosts, getPost, createPost, editPost, removePost, publishPost, unpublishPost };
+const convertFileToBase64 = (file) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+
+async function uploadImage(params) {
+    console.log("params:");
+    console.log(params);
+    const newPic = params;
+    const url = `${prefixUrl}/images/upload`;
+
+    return convertFileToBase64(newPic).then(async (res) => {
+        return (await axios.post(url, {
+            data: res,
+            filename: null,
+        })).data;
+
+        // return httpClient(url, {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         data: res,
+        //         filename: null,
+        //     }),
+        // }).then(({ json }) => {
+        //     return json;
+        // });
+    });
+}
+
+export { getPosts, getPost, createPost, editPost, removePost, publishPost, unpublishPost, uploadImage };

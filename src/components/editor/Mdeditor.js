@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SimpleMDE from "react-simplemde-editor";
+import { uploadImage } from "../../services/postService";
 
 const Mdeditor = ({ post = {}, value = "", onChange }) => {
   const [content, setContent] = useState("");
@@ -18,21 +19,20 @@ const Mdeditor = ({ post = {}, value = "", onChange }) => {
     triggerChange(contentVal)
   }
 
-  const imageUploadFunction = function (data, onSuccess, onError) {
-    console.log(data instanceof File);
+  const imageUploadFunction = function (file, onSuccess, onError) {
+    console.log(file instanceof File);
     console.log("imageUploadFunction");
-    // hexoDataProvider.upload(data).then((data) => {
-    //   console.log("data:");
-    //   console.log(data);
-    //   if (data.src) {
-    //     data.src = data.src.replace(/\\/g, "/");
-    //     data.src = data.src.substr(1, data.src.length - 1);
-    //     console.log("Upload image successfully:" + data.src);
-    //     onSuccess("/" + data.src);
-    //   } else {
-    //     onError(data);
-    //   }
-    // });
+    uploadImage(file).then((res) => {
+      console.log("res:", res);
+      if (res.src) {
+        res.src = res.src.replace(/\\/g, "/");
+        res.src = res.src.substr(1, res.src.length - 2);
+        console.log("Upload image successfully:" + res.src);
+        onSuccess(res.src);
+      } else {
+        onError(res);
+      }
+    })
   };
 
   const extraKeys = () => {

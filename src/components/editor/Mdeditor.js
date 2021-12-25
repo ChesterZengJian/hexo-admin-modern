@@ -4,19 +4,19 @@ import { uploadImage } from "../../services/postService";
 
 const Mdeditor = ({ post = {}, value = "", onChange }) => {
   const [content, setContent] = useState("");
-  let contentVal = "";
+  let tmpContent = value;
 
   const triggerChange = (changeValue) => {
     onChange?.(changeValue)
   };
 
   const onContentChange = (val) => {
-    contentVal = val;
+    tmpContent = val;
   }
 
   const onContentBlur = () => {
-    setContent(contentVal);
-    triggerChange(contentVal)
+    setContent(tmpContent);
+    triggerChange(tmpContent)
   }
 
   const imageUploadFunction = function (file, onSuccess, onError) {
@@ -26,9 +26,9 @@ const Mdeditor = ({ post = {}, value = "", onChange }) => {
       console.log("res:", res);
       if (res.src) {
         res.src = res.src.replace(/\\/g, "/");
-        res.src = res.src.substr(1, res.src.length - 2);
+        res.src = res.src.substr(1, res.src.length - 1);
         console.log("Upload image successfully:" + res.src);
-        onSuccess(res.src);
+        onSuccess("/" + res.src);
       } else {
         onError(res);
       }

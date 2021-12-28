@@ -22,7 +22,6 @@ export default function PostList() {
 
     useEffect(() => {
         getPosts(queryPostsParam).then(function (posts) {
-            console.log(posts)
             setPostList(posts);
         });
     }, [queryPostsParam])

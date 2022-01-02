@@ -4,7 +4,7 @@ const prefixUrl = "/admin/api";
 
 async function getPosts(params) {
     let url = prefixUrl + "/posts/list";
-    console.log(params)
+    // console.log(params)
     const res = await axios.get(url, {
         params: params
     });
@@ -19,14 +19,14 @@ async function getPost(id) {
 
 async function createPost(params) {
     let url = prefixUrl + "/posts/new";
-    console.log(params)
+    // console.log(params)
     const res = await axios.post(url, params);
     return res;
 }
 
 async function editPost(id, params) {
     let url = prefixUrl + "/posts/" + id;
-    console.log(params)
+    // console.log(params)
     const res = await axios.post(url, params);
     return res;
 }
@@ -58,8 +58,8 @@ const convertFileToBase64 = (file) =>
     });
 
 async function uploadImage(params) {
-    console.log("params:");
-    console.log(params);
+    // console.log("params:");
+    // console.log(params);
     const newPic = params;
     const url = `${prefixUrl}/images/upload`;
 

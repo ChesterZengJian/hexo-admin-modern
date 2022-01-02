@@ -2,20 +2,9 @@ import React, { useState } from "react";
 import SimpleMDE from "react-simplemde-editor";
 import { uploadImage } from "../../services/postService";
 
-const Mdeditor = ({ post = {}, value = "", onChange }) => {
-  let tmpContent = value;
-
-  const triggerChange = (changeValue) => {
-    onChange?.(changeValue)
-  };
-
-  const onContentChange = (val) => {
-    tmpContent = val;
-  }
-
-  const onContentBlur = () => {
-    triggerChange(tmpContent)
-  }
+const Mdeditor = ({ id = "", value = "", onChange, onBlur }) => {
+  // console.log("value:", value)
+  // console.log("id:",)
 
   const imageUploadFunction = function (file, onSuccess, onError) {
     console.log(file instanceof File);
@@ -92,22 +81,28 @@ const Mdeditor = ({ post = {}, value = "", onChange }) => {
     cm.replaceSelection("<!-- More -->");
   }
 
+  const isEmpty = (obj) => {
+    if (typeof obj === "undefined" || obj === null || obj === "") {
+      return true;
+    }
+    return false;
+  }
+
   return (
     <SimpleMDE
       value={value}
-      onChange={onContentChange}
-      onBlur={onContentBlur}
+      onChange={onChange}
       extraKeys={extraKeys()}
       options={{
         minHeight: "72vh",
         maxHeight: "72vh",
         autofocus: false,
         autosave: {
-          enabled: post.id != null,
-          uniqueId: post.id || "a7a78ce1-941c-4337-bb39-d79c15c2709a",
+          enabled: !isEmpty(id),
+          uniqueId: isEmpty(id) || "a7a78ce1-941c-4337-bb39-d79c15c2709a",
           delay: 300
         },
-        initialValue: value.content,
+        initialValue: value,
         uploadImage: true,
         imageUploadFunction: imageUploadFunction,
         shortcuts,

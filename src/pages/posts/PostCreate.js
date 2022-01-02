@@ -31,6 +31,7 @@ export default function PostCreate() {
 
         if (id) {
             getPost(id).then((res) => {
+                console.log("Post:", res)
                 setPost(res);
                 form.setFieldsValue({
                     title: res.title,
@@ -45,26 +46,21 @@ export default function PostCreate() {
     const onFinish = (values) => {
         SetIsSaving(true);
         console.log('Received values of form: ', values);
+        let param = {
+            title: values.title,
+            categories: [values.category],
+            tags: values.tags,
+            _content: post._content
+        };
         if (post._id) {
-            console.log("post=", post)
-            editPost(post._id, {
-                title: values.title,
-                categories: [values.category],
-                tags: values.tags,
-                _content: values.content
-            }).then((res) => {
+            editPost(post._id, param).then((res) => {
                 saveSuccessfully();
 
                 // console.log("edit success:", res);
             });
             return;
         }
-        createPost({
-            title: values.title,
-            categories: [values.category],
-            tags: values.tags,
-            content: values.content
-        }).then(function (res) {
+        createPost(param).then(function (res) {
             setPost(res.data);
             saveSuccessfully();
 
@@ -119,6 +115,11 @@ export default function PostCreate() {
                 </Button>
             </Space>
         )
+    }
+
+    const onContentChange = (val) => {
+        post._content = val;
+        setPost(post)
     }
 
     return (
@@ -198,9 +199,13 @@ export default function PostCreate() {
                 </Row>
                 <Row>
                     <Col span={24}>
-                        <Form.Item name={"content"}>
-                            <Mdeditor />
-                        </Form.Item>
+                        {/* <Form.Item name={"content"}> */}
+                        <Mdeditor
+                            id={post?._id}
+                            value={post?._content}
+                            onChange={onContentChange}
+                        />
+                        {/* </Form.Item> */}
                     </Col>
                 </Row>
             </Form>

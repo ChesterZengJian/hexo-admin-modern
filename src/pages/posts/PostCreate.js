@@ -1,4 +1,4 @@
-import { Button, Col, Row, Form, Input, Select, Divider, Space } from "antd"
+import { Button, Col, Row, Form, Input, Select, Divider, Space, message } from "antd"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Mdeditor } from "../../components/editor"
 import { createPost, editPost, getPost } from "../../services/postService";
@@ -13,6 +13,7 @@ export default function PostCreate() {
     const [tags, setTags] = useState([]);
     const [categories, setCategories] = useState([]);
     const [newCategory, setNewCategory] = useState('');
+    const [isSaving, SetIsSaving] = useState(false);
     const navigate = useNavigate();
     const { Option } = Select;
 
@@ -42,6 +43,7 @@ export default function PostCreate() {
     }, [])
 
     const onFinish = (values) => {
+        SetIsSaving(true);
         console.log('Received values of form: ', values);
         if (post._id) {
             console.log("post=", post)
@@ -51,7 +53,9 @@ export default function PostCreate() {
                 tags: values.tags,
                 _content: values.content
             }).then((res) => {
-                console.log("edit success:", res);
+                saveSuccessfully();
+
+                // console.log("edit success:", res);
             });
             return;
         }
@@ -61,11 +65,18 @@ export default function PostCreate() {
             tags: values.tags,
             content: values.content
         }).then(function (res) {
-            console.log("res=", res)
             setPost(res.data);
+            saveSuccessfully();
+
+            // console.log("create successfullty:", res)
             // navigate("/posts", { replace: true });
         })
     };
+
+    const saveSuccessfully = () => {
+        SetIsSaving(false);
+        message.success("Save successfully")
+    }
 
     const getTagOptions = () => {
         let tagOptions = [];
@@ -103,7 +114,7 @@ export default function PostCreate() {
     const submitButton = () => {
         return (
             <Space>
-                <Button display={post._id} type="primary" htmlType="submit">
+                <Button display={post._id} type="primary" htmlType="submit" loading={isSaving} disabled={isSaving}>
                     Save
                 </Button>
             </Space>

@@ -35,6 +35,10 @@ const Mdeditor = ({ id = "", value = "", onChange, onBlur }) => {
       },
       "Shift-Ctrl-M": function (cm) {
         writeReadMoreTag(cm);
+      },
+      "Shift-Ctrl-L": function (cm) {
+        var selection = cm.getSelection();
+        cm.replaceSelection(selection + "<br />");
       }
     };
   };
@@ -110,7 +114,7 @@ const Mdeditor = ({ id = "", value = "", onChange, onBlur }) => {
         showIcons: ["code", "table"],
         tabSize: 3,
         indentWithTabs: false,
-        lineNumbers: false,
+        lineNumbers: true,
         lineWrapping: true,
         promptURLs: true,
         toolbar: [

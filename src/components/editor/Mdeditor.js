@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import SimpleMDE from "react-simplemde-editor";
 import { uploadImage } from "../../services/postService";
 
-const Mdeditor = ({ id = "", value = "", onChange, onBlur }) => {
-  // console.log("value:", value)
-  // console.log("id:",)
+const Mdeditor = ({ id = "", value = "", onChange, onSave }) => {
 
   const imageUploadFunction = function (file, onSuccess, onError) {
     console.log(file instanceof File);
@@ -39,6 +37,9 @@ const Mdeditor = ({ id = "", value = "", onChange, onBlur }) => {
       "Shift-Ctrl-L": function (cm) {
         var selection = cm.getSelection();
         cm.replaceSelection(selection + "<br />");
+      },
+      "Shift-Ctrl-S": function (cm) {
+        onSave();
       }
     };
   };

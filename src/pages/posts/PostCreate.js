@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { Mdeditor } from "../../components/editor"
 import { createPost, editPost, getPost } from "../../services/postService";
 import { PlusOutlined } from '@ant-design/icons';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCategories } from "../../services/categoryService";
 import { getTags } from "../../services/tagService";
 
@@ -18,6 +18,8 @@ export default function PostCreate() {
     const { Option } = Select;
 
     let { id } = useParams();
+
+    const submitButton = useRef(null);
 
     useEffect(() => {
         getCategories().then((res) => {
@@ -107,10 +109,10 @@ export default function PostCreate() {
         setNewCategory('');
     };
 
-    const submitButton = () => {
+    const submitComponent = () => {
         return (
             <Space>
-                <Button display={post._id} type="primary" htmlType="submit" loading={isSaving} disabled={isSaving}>
+                <Button ref={submitButton} display={post._id} type="primary" htmlType="submit" loading={isSaving} disabled={isSaving}>
                     Save
                 </Button>
             </Space>
@@ -122,6 +124,10 @@ export default function PostCreate() {
         setPost(post)
     }
 
+    const onSubmit = () => {
+        submitButton.current.click();
+    }
+
     return (
         <>
             <Form
@@ -131,7 +137,7 @@ export default function PostCreate() {
                 <Row gutter={24}>
                     <Col span={1}>
                         <Form.Item>
-                            {submitButton()}
+                            {submitComponent()}
                         </Form.Item>
                     </Col>
                     <Col offset={22} span={1}>
@@ -199,13 +205,12 @@ export default function PostCreate() {
                 </Row>
                 <Row>
                     <Col span={24}>
-                        {/* <Form.Item name={"content"}> */}
                         <Mdeditor
                             id={post?._id}
                             value={post?._content}
                             onChange={onContentChange}
+                            onSave={onSubmit}
                         />
-                        {/* </Form.Item> */}
                     </Col>
                 </Row>
             </Form>

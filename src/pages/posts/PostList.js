@@ -12,7 +12,7 @@ export default function PostList() {
         title: '',
         currPage: consts.defaultCurrent,
         pageSize: consts.defaultPageSize,
-        sort: "date",
+        sort: "updated",
         order: consts.defaultOrder
     })
     const [posts, setPosts] = useState([]);

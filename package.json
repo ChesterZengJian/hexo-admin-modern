@@ -1,0 +1,10 @@
+{
+    "name": "hexo-admin-modern",
+    "version": "1.0.0",
+    "description": "A modern admin web for hexo.",
+    "main": "index.js",
+    "repository": "https://github.com/ChesterZengJian/hexo-admin-modern.git",
+    "author": "Chester <374488168@qq.com>",
+    "license": "MIT",
+    "proxy": "http://localhost:4000"
+}

@@ -7,7 +7,14 @@
     "author": "Chester <374488168@qq.com>",
     "license": "MIT",
     "proxy": "http://localhost:4000",
-    "dependencies": {},
+    "dependencies": {
+        "hexo-front-matter": "2.0.0",
+        "hexo-fs": "0.1.6",
+        "hexo-util": "2.5.0",
+        "js-yaml": "3.13.1",
+        "moment": "2.29.1",
+        "serve-static": "1.15.0"
+    },
     "devDependencies": {
         "eslint": "^8.25.0",
         "eslint-plugin-react": "^7.31.10"

@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import {
     Table,
     Divider,
+    Tag,
     Space,
     Card,
     Breadcrumb,
@@ -87,8 +88,19 @@ const PostList = () => {
     const editPost = (data) => {
         navigate(`/posts/${data._id}`);
     };
-    const publishPost = (data) => {
-        navigate(`/publish?id=${data._id}`);
+
+    // 发布文章
+    const publishPost = async (data) => {
+        if (data.published) {
+            await http.put(`/admin/api/posts/${data._id}/unpublish`);
+        } else {
+            await http.put(`/admin/api/posts/${data._id}/publish`);
+        }
+        // 刷新一下列表
+        setParams({
+            ...params,
+            curPage: 1,
+        });
     };
 
     const columns = [
@@ -100,6 +112,16 @@ const PostList = () => {
         {
             title: '标签',
             dataIndex: 'tags',
+            render: (data) => {
+                let tags = data.map((item, index) => {
+                    return (
+                        <Tag key={index} color="green">
+                            {item}
+                        </Tag>
+                    );
+                });
+                return <>{tags}</>;
+            },
         },
         {
             title: '类别',
@@ -132,7 +154,7 @@ const PostList = () => {
                             title="Publish"
                             onClick={() => publishPost(data)}
                         >
-                            Publish
+                            {data.published ? 'Draft' : 'Publish'}
                         </Button>
                         <Button
                             type="link"

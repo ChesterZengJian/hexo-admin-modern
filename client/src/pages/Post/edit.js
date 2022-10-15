@@ -12,12 +12,18 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import './index.scss';
 import { useStore } from '@/stores';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { http } from '@/utils';
 import MdEditor from '@/components/MdEditor';
 const { Option } = Select;
 const PostEdit = () => {
-    const { categoryStore } = useStore();
+    const { categoryStore, tagStore } = useStore();
+    const [published, setPublished] = useState(false);
+    // 路由参数id
+    const params = useParams();
+    const id = params.id;
+    const autosaveId = id || 'a7a78ce1-941c-4337-bb39-d79c15c2709a';
+    const autosaveItemKey = `smde_${autosaveId}`;
 
     // 提交表单
     const navigate = useNavigate();
@@ -39,13 +45,21 @@ const PostEdit = () => {
             navigate('/');
         }
 
+        localStorage.removeItem(autosaveItemKey);
         message.success(`${id ? '更新成功' : '创建成功'}`);
     };
 
-    // 编辑功能
-    // 文案适配  路由参数id 判断条件
-    const params = useParams();
-    const id = params.id;
+    // 发布文章
+    const publishPost = async () => {
+        if (published) {
+            await http.put(`/admin/api/posts/${id}/unpublish`);
+            setPublished(false);
+        } else {
+            await http.put(`/admin/api/posts/${id}/publish`);
+            setPublished(true);
+        }
+    };
+
     // 数据回填  id调用接口  1.表单回填 2.暂存列表 3.Upload组件fileList
     const [form] = Form.useForm();
     useEffect(() => {
@@ -53,6 +67,7 @@ const PostEdit = () => {
             const res = await http.get(`/admin/api/posts/${id}`);
             console.log(res.data);
             const data = res.data;
+            setPublished(res.data.published);
             // 表单数据回填
             form.setFieldsValue({ ...data });
         };
@@ -113,10 +128,12 @@ const PostEdit = () => {
                     <Form.Item label="标签" name="tags">
                         <Select
                             placeholder="请选择文章标签"
+                            mode="multiple"
+                            allowClear
                             style={{ width: 400 }}
                         >
-                            {categoryStore.categoryList.map((item) => (
-                                <Option key={item._id} value={item._id}>
+                            {tagStore.tagList.map((item) => (
+                                <Option key={item._id} value={item.name}>
                                     {item.name}
                                 </Option>
                             ))}
@@ -130,7 +147,10 @@ const PostEdit = () => {
                         name="_content"
                         rules={[{ required: true, message: '请输入文章内容' }]}
                     >
-                        <MdEditor />
+                        <MdEditor
+                            autosaveId={autosaveId}
+                            autosaveItemKey={autosaveItemKey}
+                        />
                     </Form.Item>
 
                     <Form.Item wrapperCol={{ offset: 4 }}>
@@ -142,6 +162,17 @@ const PostEdit = () => {
                             >
                                 {id ? '更新' : '创建'}文章
                             </Button>
+                            {id ? (
+                                <Button
+                                    size="large"
+                                    type="primary"
+                                    onClick={publishPost}
+                                >
+                                    {published ? '不发布' : '发布'}文章
+                                </Button>
+                            ) : (
+                                ''
+                            )}
                         </Space>
                     </Form.Item>
                 </Form>

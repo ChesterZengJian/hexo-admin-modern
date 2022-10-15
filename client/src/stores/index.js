@@ -1,6 +1,7 @@
 import React from 'react';
-import CategoryStore from './category.Store';
 import { configure } from 'mobx';
+import CategoryStore from './category.Store';
+import TagStore from './tag.Store';
 
 configure({
     // enforceActions: 'never',
@@ -9,6 +10,7 @@ configure({
 class RootStore {
     constructor() {
         this.categoryStore = new CategoryStore();
+        this.tagStore = new TagStore();
     }
 }
 

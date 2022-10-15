@@ -1,9 +1,5 @@
 import { Layout, Menu, Popconfirm } from 'antd';
-import {
-    HomeOutlined,
-    DiffOutlined,
-    LogoutOutlined,
-} from '@ant-design/icons';
+import { HomeOutlined, DiffOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/stores';
@@ -15,11 +11,12 @@ const { Header, Sider } = Layout;
 const DefaultLayout = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const { categoryStore } = useStore();
+    const { categoryStore, tagStore } = useStore();
 
     useEffect(() => {
         categoryStore.loadCategoryList();
-    }, [categoryStore]);
+        tagStore.loadTagList();
+    }, [categoryStore,tagStore]);
 
     const onConfirm = () => {
         navigate('/login');

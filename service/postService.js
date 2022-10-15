@@ -134,7 +134,7 @@ function createPost(req, res, hexo) {
         title: req.body.title,
         categories: req.body.categories,
         tags: req.body.tags,
-        _content: req.body.content,
+        _content: req.body._content,
         layout: 'draft',
         date: new Date(),
         author: hexo.config.author,

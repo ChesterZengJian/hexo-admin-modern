@@ -28,7 +28,7 @@ const PostList = () => {
     const [params, setParams] = useState({
         isDiscarded: 0,
         isPublished: 0,
-        sort: 'date',
+        sort: 'updated',
         order: 0,
         curPage: 1,
         pageSize: 10,
@@ -108,12 +108,12 @@ const PostList = () => {
         {
             title: '创建时间',
             dataIndex: 'date',
-            render: (data) => dateFormat(data, 'yyyy-mm-dd hh:MM:ss '),
+            render: (data) => dateFormat(data, 'yyyy-mm-dd HH:MM:ss '),
         },
         {
             title: '更新时间',
             dataIndex: 'updated',
-            render: (data) => dateFormat(data, 'yyyy-mm-dd hh:MM:ss '),
+            render: (data) => dateFormat(data, 'yyyy-mm-dd HH:MM:ss '),
         },
         {
             title: '操作',
@@ -191,6 +191,13 @@ const PostList = () => {
                             style={{ marginLeft: 80 }}
                         >
                             筛选
+                        </Button>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            style={{ marginLeft: 20 }}
+                        >
+                            <Link to="/posts/new">创建</Link>
                         </Button>
                     </Form.Item>
                 </Form>

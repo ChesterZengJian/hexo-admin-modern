@@ -14,6 +14,7 @@ import './index.scss';
 import { useStore } from '@/stores';
 import { useEffect } from 'react';
 import { http } from '@/utils';
+import MdEditor from '@/components/MdEditor';
 const { Option } = Select;
 const PostEdit = () => {
     const { categoryStore } = useStore();
@@ -21,17 +22,20 @@ const PostEdit = () => {
     // 提交表单
     const navigate = useNavigate();
     const onFinish = async (values) => {
+        console.log('finish val: ', values);
         // 数据的二次处理 重点是处理cover字段
-        const { content, title } = values;
+        const { title, categories, tags, _content } = values;
         const params = {
-            content,
             title,
+            categories: [categories],
+            tags,
+            _content,
         };
 
         if (id) {
-            await http.put(`/admin/posts/${id}`, params);
+            await http.put(`/admin/api/posts/${id}`, params);
         } else {
-            await http.post('/admin/posts', params);
+            await http.post('/admin/api/posts', params);
             navigate('/');
         }
 
@@ -99,7 +103,7 @@ const PostEdit = () => {
                             style={{ width: 400 }}
                         >
                             {categoryStore.categoryList.map((item) => (
-                                <Option key={item._id} value={item._id}>
+                                <Option key={item._id} value={item.name}>
                                     {item.name}
                                 </Option>
                             ))}
@@ -123,10 +127,10 @@ const PostEdit = () => {
                     {/* 它的输入内容 会在onFinished回调中收集起来 */}
                     <Form.Item
                         label="内容"
-                        name="content"
+                        name="_content"
                         rules={[{ required: true, message: '请输入文章内容' }]}
                     >
-                        <Input />
+                        <MdEditor />
                     </Form.Item>
 
                     <Form.Item wrapperCol={{ offset: 4 }}>

@@ -139,12 +139,13 @@ function MdEditor(props) {
             shortcuts,
             spellChecker: false,
             showIcons: ['code', 'table'],
-            tabSize: 2,
+            tabSize: 4,
             indentWithTabs: false,
             lineNumbers: true,
             lineWrapping: true,
             promptURLs: true,
             toolbar: toolbar,
+            previewImagesInEditor: true,
         };
     }, [autosaveId]);
 

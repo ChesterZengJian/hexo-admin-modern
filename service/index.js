@@ -1,4 +1,5 @@
 const categoryService = require('./categoryService');
+const imageService = require('./imageService');
 const pageService = require('./pageService');
 const postService = require('./postService');
 const settingService = require('./settingService');
@@ -67,6 +68,7 @@ function addAdminService(app, hexo) {
     use('settings', settingService);
     use('tags', tagService);
     use('categories', categoryService);
+    use('images/upload', imageService);
 }
 
 module.exports = addAdminService;

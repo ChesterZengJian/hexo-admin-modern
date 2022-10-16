@@ -3,6 +3,7 @@ import { Form } from 'antd';
 import SimpleMdeReact from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import './index.scss';
+import { http } from '@/utils';
 
 function MdEditor(props) {
     const { autosaveId, autosaveItemKey, value } = props;
@@ -84,6 +85,46 @@ function MdEditor(props) {
             toolbarOthers,
         ];
 
+        const imageUploadFunction = function (file, onSuccess, onError) {
+            console.log(file instanceof File);
+            console.log('imageUploadFunction');
+            uploadImage(file).then((res) => {
+                console.log('res:', res);
+                if (res.src) {
+                    res.src = res.src.replace(/\\/g, '/');
+                    res.src = res.src.substr(1, res.src.length - 2);
+                    console.log('Upload image successfully:' + res.src);
+                    onSuccess(res.src);
+                } else {
+                    onError(res);
+                }
+            });
+        };
+
+        const convertFileToBase64 = (file) =>
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+
+        const uploadImage = async (params) => {
+            // console.log("params:");
+            // console.log(params);
+            const newPic = params;
+            const url = `admin/api/images/upload`;
+
+            return convertFileToBase64(newPic).then(async (res) => {
+                return (
+                    await http.post(url, {
+                        data: res,
+                        filename: null,
+                    })
+                ).data;
+            });
+        };
+
         return {
             minHeight: '72vh',
             maxHeight: '72vh',
@@ -93,8 +134,8 @@ function MdEditor(props) {
                 uniqueId: autosaveId,
                 delay: 1000,
             },
-            // uploadImage: true,
-            // imageUploadFunction: imageUploadFunction,
+            uploadImage: true,
+            imageUploadFunction: imageUploadFunction,
             shortcuts,
             spellChecker: false,
             showIcons: ['code', 'table'],

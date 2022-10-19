@@ -1,4 +1,4 @@
-const key = 'pc-key';
+const key = 'hexo-admin-token';
 
 const setToken = (token) => {
     return window.localStorage.setItem(key, token);

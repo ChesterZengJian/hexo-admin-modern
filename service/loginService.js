@@ -11,12 +11,21 @@ var bcrypt = require('bcrypt');
 //     });
 // }
 
+function getAdminConfig(hexo) {
+    const config = hexo.config.admin;
+    const username = config.username || 'admin';
+    const secretKey = config.secret || 'hexo-admin-secret';
+    const password = config.password_hash || '';
+
+    return { username, secretKey, password };
+}
+
 function getToken(username, secretKey) {
     const userInfo = {
         username: username,
     };
     const tokenConfig = {
-        expiresIn: '30s',
+        expiresIn: '24h',
     };
     return jwt.sign(userInfo, secretKey, tokenConfig);
 }
@@ -37,19 +46,15 @@ function loginService(req, res, hexo) {
         return;
     }
 
-    const config = hexo.config.admin;
-    const secretKey = config.secret || 'hexo-admin-secret';
-    const isPwdRight = bcrypt.compareSync(
-        req.body.password,
-        config.password_hash
-    );
+    const { username, secretKey, password } = getAdminConfig(hexo);
+    const isPwdRight = bcrypt.compareSync(req.body.password, password);
 
-    if (req.body.username !== config.username || !isPwdRight) {
+    if (req.body.username !== username || !isPwdRight) {
         res.badRequest('username or password error');
         return;
     }
 
-    const tokenStr = getToken(config.username, secretKey);
+    const tokenStr = getToken(username, secretKey);
 
     res.ok({
         message: 'login successfully',
@@ -57,4 +62,4 @@ function loginService(req, res, hexo) {
     });
 }
 
-module.exports = loginService;
+module.exports = { loginService, getAdminConfig };

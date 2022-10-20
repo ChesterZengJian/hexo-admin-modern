@@ -1,7 +1,7 @@
 const { expressjwt: jwt } = require('express-jwt');
 const categoryService = require('./categoryService');
 const imageService = require('./imageService');
-const loginService = require('./loginService');
+const { loginService, getAdminConfig } = require('./loginService');
 const pageService = require('./pageService');
 const postService = require('./postService');
 const settingService = require('./settingService');
@@ -37,8 +37,7 @@ function handleCircularReference(k, v) {
  * @param {Object} hexo
  */
 function addAdminService(app, hexo) {
-    const config = hexo.config.admin;
-    const secretKey = config.secret || 'hexo-admin-secret';
+    const { secretKey } = getAdminConfig(hexo);
     // unless 用于指明哪些 api 不需要认证
     app.use(
         jwt({ secret: secretKey, algorithms: ['HS256'] }).unless({

@@ -1,7 +1,6 @@
 import { Layout, Menu, Popconfirm } from 'antd';
 import {
     HomeOutlined,
-    DiffOutlined,
     LogoutOutlined,
     UserOutlined,
 } from '@ant-design/icons';
@@ -40,7 +39,6 @@ const DefaultLayout = () => {
 
     const menuItems = [
         getMenuItem(<Link to="/">Posts</Link>, '/', <HomeOutlined />),
-        getMenuItem(<Link to="/tags">Tags</Link>, '/tags', <DiffOutlined />),
     ];
 
     return (

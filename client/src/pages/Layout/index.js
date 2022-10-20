@@ -65,7 +65,12 @@ const DefaultLayout = () => {
                 </div>
             </Header>
             <Layout>
-                <Sider width={200} className="site-layout-background">
+                <Sider
+                    width={200}
+                    className="site-layout-background"
+                    collapsible
+                    breakpoint='xl'
+                >
                     <Menu
                         mode="inline"
                         theme="dark"

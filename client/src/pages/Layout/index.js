@@ -45,41 +45,41 @@ const DefaultLayout = () => {
 
     return (
         <Layout>
-            <Header className="header">
+            <Sider
+                width={200}
+                className="site-layout-background"
+                collapsible
+                breakpoint="xl"
+            >
                 <div className="logo"></div>
-                <div className="user-info">
-                    <span className="user-icon">
-                        <UserOutlined />
-                    </span>
-                    <span className="user-name">admin</span>
-                    <span className="user-logout">
-                        <Popconfirm
-                            title="您确定登出吗？"
-                            okText="是的"
-                            cancelText="取消"
-                            onConfirm={onConfirm}
-                        >
-                            <LogoutOutlined />
-                        </Popconfirm>
-                    </span>
-                </div>
-            </Header>
+                <Menu
+                    mode="inline"
+                    theme="dark"
+                    defaultSelectedKeys={pathname}
+                    selectedKeys={pathname}
+                    style={{ height: '100%', borderRight: 0 }}
+                    items={menuItems}
+                />
+            </Sider>
             <Layout>
-                <Sider
-                    width={200}
-                    className="site-layout-background"
-                    collapsible
-                    breakpoint='xl'
-                >
-                    <Menu
-                        mode="inline"
-                        theme="dark"
-                        defaultSelectedKeys={pathname}
-                        selectedKeys={pathname}
-                        style={{ height: '100%', borderRight: 0 }}
-                        items={menuItems}
-                    />
-                </Sider>
+                <Header className="header">
+                    <div className="user-info">
+                        <span className="user-icon">
+                            <UserOutlined />
+                        </span>
+                        <span className="user-name">admin</span>
+                        <span className="user-logout">
+                            <Popconfirm
+                                title="您确定登出吗？"
+                                okText="是的"
+                                cancelText="取消"
+                                onConfirm={onConfirm}
+                            >
+                                <LogoutOutlined />
+                            </Popconfirm>
+                        </span>
+                    </div>
+                </Header>
                 <Layout className="layout-content" style={{ padding: 20 }}>
                     <Outlet />
                 </Layout>

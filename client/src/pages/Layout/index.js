@@ -11,14 +11,15 @@ const { Header, Sider } = Layout;
 const DefaultLayout = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const { categoryStore, tagStore } = useStore();
+    const { categoryStore, tagStore, loginStore } = useStore();
 
     useEffect(() => {
         categoryStore.loadCategoryList();
         tagStore.loadTagList();
-    }, [categoryStore,tagStore]);
+    }, [categoryStore, tagStore]);
 
     const onConfirm = () => {
+        loginStore.loginOut();
         navigate('/login');
     };
 
@@ -45,9 +46,9 @@ const DefaultLayout = () => {
                     <span className="user-name"></span>
                     <span className="user-logout">
                         <Popconfirm
-                            title="Are you sure to logout?"
-                            okText="Yes"
-                            cancelText="Cancel"
+                            title="您确定登出吗？"
+                            okText="是的"
+                            cancelText="取消"
                             onConfirm={onConfirm}
                         >
                             <LogoutOutlined />

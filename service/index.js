@@ -37,7 +37,8 @@ function handleCircularReference(k, v) {
  * @param {Object} hexo
  */
 function addAdminService(app, hexo) {
-    const secretKey = 'hexo-admin-secret';
+    const config = hexo.config.admin;
+    const secretKey = config.secret || 'hexo-admin-secret';
     // unless 用于指明哪些 api 不需要认证
     app.use(
         jwt({ secret: secretKey, algorithms: ['HS256'] }).unless({

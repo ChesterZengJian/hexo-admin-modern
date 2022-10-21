@@ -26,4 +26,18 @@
     .login-checkbox-label {
         color: #1890ff;
     }
+
+    .result-container {
+        width: 800px;
+        height: 460px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+
+        .result-code {
+            text-align: left;
+        }
+    }
 }

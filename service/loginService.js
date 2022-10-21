@@ -1,16 +1,6 @@
 const jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 
-// function getHashPassword(pwd) {
-//     const saltRounds = 10;
-
-//     bcrypt.hash(pwd, saltRounds, function (err, pwd_hash) {
-//         // Store hash in your password DB.
-//         console.log('my pwd:', pwd_hash);
-//         return pwd_hash;
-//     });
-// }
-
 function getAdminConfig(hexo) {
     const config = hexo.config.admin;
     const username = config.username || 'admin';

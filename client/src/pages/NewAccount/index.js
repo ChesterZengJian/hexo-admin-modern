@@ -1,28 +1,29 @@
-import { Card, Form, Input, Button, message, Space } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
-import { useStore } from '@/stores';
+import { Card, Form, Input, Button, message } from 'antd';
 import logo from '@/assets/logo.svg';
 import './index.scss';
+import { http } from '@/utils';
 
-function Login() {
-    const { loginStore } = useStore();
-    const navigate = useNavigate();
-
+function NewAccount() {
     async function onFinish(values) {
-        // values：放置的是所有表单项中用户输入的内容
-        // todo:登录
-        const { username, password } = values;
+        const { username, password, secret } = values;
         try {
-            await loginStore.login({ username, password });
+            const res = await http.post('/admin/api/accounts', {
+                username,
+                password,
+                secret,
+            });
+            console.log('res:', res.data);
         } catch (error) {
-            message.error('登录失败');
+            message.error('生成账号失败');
             return;
         }
 
-        // 跳转首页
-        navigate('/', { replace: true });
-        // 提示用户
-        message.success('登录成功');
+        // 生成账号弹窗
+        // const success = () => {
+        //     Modal.success({
+        //         content: 'some messages...some messages...',
+        //     });
+        // };
     }
 
     return (
@@ -53,16 +54,18 @@ function Login() {
                             },
                         ]}
                     >
-                        <Input
-                            type="password"
-                            size="large"
-                            placeholder="请输入密码"
-                        />
+                        <Input size="large" placeholder="请输入密码" />
                     </Form.Item>
-                    <Form.Item>
-                        <Space className="login-form-new-account">
-                            <Link to="/accounts/new">创建新账号</Link>
-                        </Space>
+                    <Form.Item
+                        name="secret"
+                        rules={[
+                            {
+                                required: true,
+                                message: '请输入加密密钥',
+                            },
+                        ]}
+                    >
+                        <Input size="large" placeholder="请输入加密密钥" />
                     </Form.Item>
                     <Form.Item>
                         <Button
@@ -71,7 +74,7 @@ function Login() {
                             size="large"
                             block
                         >
-                            登录
+                            生成账号密码
                         </Button>
                     </Form.Item>
                 </Form>
@@ -80,4 +83,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default NewAccount;

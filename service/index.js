@@ -1,4 +1,5 @@
 const { expressjwt: jwt } = require('express-jwt');
+const accountService = require('./AccountService');
 const categoryService = require('./categoryService');
 const imageService = require('./imageService');
 const { loginService, getAdminConfig } = require('./loginService');
@@ -41,7 +42,7 @@ function addAdminService(app, hexo) {
     // unless 用于指明哪些 api 不需要认证
     app.use(
         jwt({ secret: secretKey, algorithms: ['HS256'] }).unless({
-            path: [/^\/admin\/api\/login/],
+            path: [/^\/admin\/api\/login/, /^\/admin\/api\/accounts/],
         })
     );
 
@@ -84,6 +85,7 @@ function addAdminService(app, hexo) {
     };
 
     use('login', loginService);
+    use('accounts', accountService);
     use('posts', postService);
     use('pages', pageService);
     use('settings', settingService);

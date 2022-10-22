@@ -7,9 +7,6 @@ import {
 import { PostList, PostEdit } from './pages/Post';
 import { RoutingGuard } from '@/components/RoutingGuard.js';
 import { history } from '@/utils';
-// import DefaultLayout from '@/pages/Layout';
-// import Login from './pages/Login';
-// import NewAccount from './pages/NewAccount';
 
 import './App.scss';
 
@@ -28,7 +25,6 @@ function App() {
                         </div>
                     }
                 >
-                    {/* <HashRouter> */}
                     <Routes>
                         <Route
                             path="/"
@@ -59,7 +55,6 @@ function App() {
                         ></Route>
                     </Routes>
                 </Suspense>
-                {/* </HashRouter> */}
             </div>
         </HistoryRouter>
     );

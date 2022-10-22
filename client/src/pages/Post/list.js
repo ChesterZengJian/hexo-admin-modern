@@ -177,7 +177,7 @@ const PostList = () => {
                 title={
                     <Breadcrumb separator=">">
                         <Breadcrumb.Item>
-                            <Link to="/home">首页</Link>
+                            <Link to="/">首页</Link>
                         </Breadcrumb.Item>
                         <Breadcrumb.Item>内容管理</Breadcrumb.Item>
                     </Breadcrumb>

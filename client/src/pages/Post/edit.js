@@ -83,7 +83,7 @@ const PostEdit = () => {
                 title={
                     <Breadcrumb separator=">">
                         <Breadcrumb.Item>
-                            <Link to="/home">首页</Link>
+                            <Link to="/">首页</Link>
                         </Breadcrumb.Item>
                         <Breadcrumb.Item>
                             {id ? '编辑' : '创建'}文章

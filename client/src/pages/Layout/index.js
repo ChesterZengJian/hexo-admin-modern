@@ -1,9 +1,5 @@
 import { Layout, Menu, Popconfirm } from 'antd';
-import {
-    HomeOutlined,
-    LogoutOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
+import { HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/stores';
@@ -65,7 +61,7 @@ const DefaultLayout = () => {
                         <span className="user-icon">
                             <UserOutlined />
                         </span>
-                        <span className="user-name">admin</span>
+                        <span className="user-name">{loginStore.username}</span>
                         <span className="user-logout">
                             <Popconfirm
                                 title="您确定登出吗？"

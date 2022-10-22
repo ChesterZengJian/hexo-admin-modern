@@ -48,6 +48,7 @@ function loginService(req, res, hexo) {
 
     res.ok({
         message: 'login successfully',
+        username: username,
         token: tokenStr,
     });
 }

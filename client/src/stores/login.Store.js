@@ -1,8 +1,17 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { getToken, setToken, removeToken, http } from '@/utils';
+import {
+    getUsername,
+    getToken,
+    setToken,
+    removeToken,
+    http,
+    setUsername,
+    removeUsername,
+} from '@/utils';
 
 class loginStore {
     token = getToken() || '';
+    username = getUsername() || 'admin';
 
     constructor() {
         makeAutoObservable(this);
@@ -16,8 +25,10 @@ class loginStore {
 
         runInAction(() => {
             this.token = res.data.token;
+            this.username = res.data.username;
             // 存入ls
             setToken(this.token);
+            setUsername(this.username);
         });
     };
 
@@ -25,6 +36,7 @@ class loginStore {
     loginOut = () => {
         this.token = '';
         removeToken();
+        removeUsername();
     };
 }
 

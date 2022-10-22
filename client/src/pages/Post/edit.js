@@ -103,20 +103,14 @@ const PostEdit = () => {
                         name="title"
                         rules={[{ required: true, message: '请输入文章标题' }]}
                     >
-                        <Input
-                            placeholder="请输入文章标题"
-                            style={{ width: 400 }}
-                        />
+                        <Input placeholder="请输入文章标题" />
                     </Form.Item>
                     <Form.Item
                         label="类型"
                         name="categories"
                         rules={[{ required: true, message: '请选择文章类型' }]}
                     >
-                        <Select
-                            placeholder="请选择文章类型"
-                            style={{ width: 400 }}
-                        >
+                        <Select placeholder="请选择文章类型">
                             {categoryStore.categoryList.map((item) => (
                                 <Option key={item._id} value={item.name}>
                                     {item.name}
@@ -124,13 +118,11 @@ const PostEdit = () => {
                             ))}
                         </Select>
                     </Form.Item>
-
                     <Form.Item label="标签" name="tags">
                         <Select
                             placeholder="请选择文章标签"
                             mode="multiple"
                             allowClear
-                            style={{ width: 400 }}
                         >
                             {tagStore.tagList.map((item) => (
                                 <Option key={item._id} value={item.name}>

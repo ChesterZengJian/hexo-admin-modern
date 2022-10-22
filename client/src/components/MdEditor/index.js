@@ -126,8 +126,8 @@ function MdEditor(props) {
         };
 
         return {
-            minHeight: '72vh',
-            maxHeight: '72vh',
+            minHeight: '60vh',
+            maxHeight: '60vh',
             autofocus: true,
             autosave: {
                 enabled: true,

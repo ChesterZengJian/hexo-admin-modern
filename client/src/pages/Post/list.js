@@ -13,6 +13,8 @@ import {
     Button,
     Radio,
     Input,
+    Row,
+    Col,
 } from 'antd';
 import 'moment/locale/zh-cn';
 import { useEffect, useState } from 'react';
@@ -191,37 +193,45 @@ const PostList = () => {
                     <Form.Item label="搜索" name="title">
                         <Input placeholder="请输入标题" />
                     </Form.Item>
-                    <Form.Item label="是否发布" name="isPublished">
-                        <Radio.Group>
-                            <Radio value={0}>全部</Radio>
-                            <Radio value={1}>已发布</Radio>
-                            <Radio value={2}>未发布</Radio>
-                        </Radio.Group>
-                    </Form.Item>
-
-                    <Form.Item label="是否删除" name="isDiscarded">
-                        <Radio.Group>
-                            <Radio value={0}>未删除</Radio>
-                            <Radio value={1}>已删除</Radio>
-                        </Radio.Group>
-                    </Form.Item>
-
-                    <Form.Item>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            style={{ marginLeft: 80 }}
-                        >
-                            筛选
-                        </Button>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            style={{ marginLeft: 20 }}
-                        >
-                            <Link to="/posts/new">创建</Link>
-                        </Button>
-                    </Form.Item>
+                    <Row gutter={10}>
+                        <Col span={12}>
+                            <Form.Item label="是否发布" name="isPublished">
+                                <Radio.Group>
+                                    <Radio value={0}>全部</Radio>
+                                    <Radio value={1}>已发布</Radio>
+                                    <Radio value={2}>未发布</Radio>
+                                </Radio.Group>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item label="是否删除" name="isDiscarded">
+                                <Radio.Group>
+                                    <Radio value={0}>未删除</Radio>
+                                    <Radio value={1}>已删除</Radio>
+                                </Radio.Group>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row justify="start">
+                        <Col>
+                            <Form.Item>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    style={{ marginLeft: 80 }}
+                                >
+                                    筛选
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    style={{ marginLeft: 20 }}
+                                >
+                                    <Link to="/posts/new">创建</Link>
+                                </Button>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 </Form>
             </Card>
             {/* 文章列表区域 */}

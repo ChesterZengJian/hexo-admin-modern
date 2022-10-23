@@ -92,8 +92,8 @@ const PostEdit = () => {
                 }
             >
                 <Form
-                    labelCol={{ span: 4 }}
-                    wrapperCol={{ span: 16 }}
+                    labelCol={{ span: 2 }}
+                    wrapperCol={{ span: 20 }}
                     initialValues={{ type: 1, content: '' }}
                     onFinish={onFinish}
                     form={form}

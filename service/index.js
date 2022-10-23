@@ -41,6 +41,7 @@ function addAdminService(app, hexo) {
     const { secretKey } = getAdminConfig(hexo);
     // unless 用于指明哪些 api 不需要认证
     app.use(
+        '/admin/api',
         jwt({ secret: secretKey, algorithms: ['HS256'] }).unless({
             path: [/^\/admin\/api\/login/, /^\/admin\/api\/accounts/],
         })

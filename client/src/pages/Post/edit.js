@@ -188,7 +188,7 @@ const PostEdit = () => {
                     <Form.Item label="标签" name="tags">
                         <Select
                             placeholder="请选择文章标签"
-                            mode="multiple"
+                            mode="tags"
                             allowClear
                         >
                             {tagStore.tagList.map((item) => (

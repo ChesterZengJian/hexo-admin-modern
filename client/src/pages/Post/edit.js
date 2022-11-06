@@ -7,18 +7,25 @@ import {
     Space,
     Select,
     message,
+    Divider,
+    Row,
+    Col,
 } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import './index.scss';
 import { useStore } from '@/stores';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { http } from '@/utils';
 import MdEditor from '@/components/MdEditor';
 const { Option } = Select;
+
+let categoryItemIdx = 0;
 const PostEdit = () => {
     const { categoryStore, tagStore } = useStore();
     const [published, setPublished] = useState(false);
+
     // 路由参数id
     const params = useParams();
     const id = params.id;
@@ -60,6 +67,34 @@ const PostEdit = () => {
         }
     };
 
+    // 设置文章类型
+    const [categoryItems, setCategoryItems] = useState([]);
+    const [categoryName, setCategoryName] = useState('');
+    const inputRef = useRef(null);
+    const onCategoryNameChange = (event) => {
+        setCategoryName(event.target.value);
+    };
+    const addItem = (e) => {
+        e.preventDefault();
+
+        if (!categoryName) {
+            return;
+        }
+
+        setCategoryItems([
+            ...categoryItems,
+            { _id: categoryItemIdx++, name: categoryName },
+        ]);
+        setCategoryName('');
+        setTimeout(() => {
+            inputRef.current?.focus();
+        }, 0);
+    };
+
+    useEffect(() => {
+        setCategoryItems(categoryStore.categoryList);
+    }, [categoryStore.categoryList]);
+
     // 数据回填  id调用接口  1.表单回填 2.暂存列表 3.Upload组件fileList
     const [form] = Form.useForm();
     useEffect(() => {
@@ -71,6 +106,7 @@ const PostEdit = () => {
             // 表单数据回填
             form.setFieldsValue({ ...data });
         };
+
         // 必须是编辑状态 才可以发送请求
         if (id) {
             loadDetail();
@@ -110,8 +146,39 @@ const PostEdit = () => {
                         name="categories"
                         rules={[{ required: true, message: '请选择文章类型' }]}
                     >
-                        <Select placeholder="请选择文章类型">
-                            {categoryStore.categoryList.map((item) => (
+                        <Select
+                            placeholder="请选择文章类型"
+                            dropdownRender={(menu) => (
+                                <>
+                                    {menu}
+                                    <Divider
+                                        style={{
+                                            margin: '8px 0',
+                                        }}
+                                    />
+                                    <Row style={{ margin: '0 8px 4px' }}>
+                                        <Col xs={16} sm={14} md={19} lg={21}>
+                                            <Input
+                                                placeholder="Please enter item"
+                                                ref={inputRef}
+                                                value={categoryName}
+                                                onChange={onCategoryNameChange}
+                                            />
+                                        </Col>
+                                        <Col xs={8} sm={10} md={5} lg={2}>
+                                            <Button
+                                                type="text"
+                                                icon={<PlusOutlined />}
+                                                onClick={addItem}
+                                            >
+                                                Add item
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </>
+                            )}
+                        >
+                            {categoryItems.map((item) => (
                                 <Option key={item._id} value={item.name}>
                                     {item.name}
                                 </Option>

@@ -4,7 +4,7 @@
     "description": "A modern admin web for hexo.",
     "main": "index.js",
     "repository": "https://github.com/ChesterZengJian/hexo-admin-modern.git",
-    "author": "Chester <374488168@qq.com>",
+    "author": "Chester <zengjian.chester@foxmail.com>",
     "license": "MIT",
     "proxy": "http://localhost:4000",
     "dependencies": {

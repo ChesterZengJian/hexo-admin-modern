@@ -10,6 +10,7 @@
         "@testing-library/user-event": "^13.2.1",
         "antd": "^4.23.4",
         "axios": "^0.27.2",
+        "craco": "^0.0.3",
         "dateformat": "^5.0.3",
         "easymde": "2.16.0",
         "history": "^5.3.0",

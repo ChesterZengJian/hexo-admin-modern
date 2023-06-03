@@ -10,11 +10,11 @@ hexo.extend.filter.register('server_middleware', (app) => {
     console.log(
         'admin loading',
         `${hexo.config.root}admin`,
-        path.join(__dirname, 'client/build')
+        path.join(__dirname, 'client')
     );
     app.use(
         `${hexo.config.root}admin`,
-        serveStatic(path.join(__dirname, 'client/build'))
+        serveStatic(path.join(__dirname, 'client'))
     );
 
     addAdminService(app, hexo);

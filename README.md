@@ -1,4 +1,5 @@
 
+
 # hexo-admin-modern
 
 ![logo](docs/images/logo.png?raw=true)
@@ -80,7 +81,7 @@ A utility in Hexo admin's Settings can hash your password and generate the `admi
 ![input new account view](docs/images/screenshot-newAccount02.png)
 ![generate new account information view](docs/images/screenshot-newAccount03.png)
 
-Once that's in place, start up your hexo server and going to `/admin/` will require you to enter your password.
+Once that's in place, restart your hexo server and going to `/admin/` will require you to enter your password.
 
 ### 5. Custom post metadata
 
